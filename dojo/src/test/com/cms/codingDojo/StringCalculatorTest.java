@@ -3,8 +3,9 @@ package com.cms.codingDojo;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-public class StringCalculatorTest {
+public class StringCalculatorTest<expected> {
     StringCalculator stringCalculator = new StringCalculator();
     @Test
     public void empty() {
@@ -74,5 +75,36 @@ public class StringCalculatorTest {
     @Test
     public void multiple_delimeters() {
         assertEquals(6, stringCalculator.add("//[*][%]\n1*2%3"));
+    }
+
+    @Test
+    public void multiple_delimeters_with_variable_length() {
+        assertEquals(6, stringCalculator.add("//[ABC][%]\n1ABC2%3"));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void single_negative() {
+        try {
+            stringCalculator.add("-1,1");
+        }
+        catch(RuntimeException e) {
+            String message = "negatives are not allowed -1";
+            assertEquals(message, e.getMessage());
+            throw e;
+        }
+        fail("runtime exception did not throw!");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void multiple_negatives() {
+        try {
+            stringCalculator.add("-1,-2");
+        }
+        catch(RuntimeException e) {
+            String message = "negatives are not allowed -1 -2";
+            assertEquals(message, e.getMessage());
+            throw e;
+        }
+        fail("runtime exception did not throw!");
     }
 }
