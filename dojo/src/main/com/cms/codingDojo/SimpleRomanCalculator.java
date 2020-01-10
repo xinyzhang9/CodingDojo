@@ -5,7 +5,6 @@ import java.util.*;
 public class SimpleRomanCalculator {
     private Map<String, String> reduceMap = new LinkedHashMap<>();
     private Map<String, String> minusToNormalMap = new LinkedHashMap<>();
-    private Map<Character, Integer> tmpStore = new LinkedHashMap<>();
 
     public SimpleRomanCalculator() {
         reduceMap.put("IIIII","V");
@@ -21,13 +20,7 @@ public class SimpleRomanCalculator {
         minusToNormalMap.put("XL", "XXXX"); // 40
         minusToNormalMap.put("IX", "VIIII"); // 9
         minusToNormalMap.put("IV", "IIII"); // 4
-        tmpStore.put('M', 0);
-        tmpStore.put('D', 0);
-        tmpStore.put('C', 0);
-        tmpStore.put('L', 0);
-        tmpStore.put('X', 0);
-        tmpStore.put('V', 0);
-        tmpStore.put('I', 0);
+
     }
 
     public String add(String a, String b) {
@@ -94,13 +87,14 @@ public class SimpleRomanCalculator {
                 }
             }
         }
+        Map<Character, Integer> store = getCharacterIntegerMap();
         for(Character c : a0.toCharArray()) {
-            tmpStore.put(c, tmpStore.get(c) + 1);
+            store.put(c, store.get(c) + 1);
         }
         for(Character c : b0.toCharArray()) {
-            tmpStore.put(c, tmpStore.get(c) - 1);
+            store.put(c, store.get(c) - 1);
         }
-        for(Map.Entry<Character, Integer> entry : tmpStore.entrySet()) {
+        for(Map.Entry<Character, Integer> entry : store.entrySet()) {
             for(int i = 0; i < entry.getValue(); i++) {
                 res += entry.getKey();
             }
